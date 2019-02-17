@@ -34,12 +34,35 @@ export class ModalComponent implements OnInit, OnChanges {
   ngOnInit() { }
 
   ngOnChanges(changesObj: SimpleChanges) {
-    if (changesObj.show && this.sqModalWindow) {
+    if (changesObj.show) {
+      this.toggleModal();
+    }
+  }
+
+  close() {
+    this.show = false;
+    this.showChange.emit(false);
+    this.toggleModal();
+  }
+
+  open() {
+    this.show = true;
+    this.showChange.emit(true);
+    this.toggleModal();
+  }
+
+  onClickOutsideComponent() {
+    this.listenForOutsideClick = false;
+    this.close();
+  }
+
+  private toggleModal() {
+    if (this.sqModalWindow) {
       const entranceAnimationClass = this.customCssAnimation.entranceAnimation || 'fadeInDown';
       const exitAnimationClass = this.customCssAnimation.exitAnimation || 'fadeOutUp';
       const animationDuration = this.customCssAnimation.duration || 500;
 
-      if (changesObj.show.currentValue === true) {
+      if (this.show === true) {
         this.renderer.removeClass(this.sqModal.nativeElement, 'display-none');
         this.renderer.addClass(this.sqModalWindow.nativeElement, entranceAnimationClass);
 
@@ -57,21 +80,6 @@ export class ModalComponent implements OnInit, OnChanges {
         }, animationDuration);
       }
     }
-  }
-
-  close() {
-    this.show = false;
-    this.showChange.emit(false);
-  }
-
-  open() {
-    this.show = true;
-    this.showChange.emit(true);
-  }
-
-  onClickOutsideComponent() {
-    this.listenForOutsideClick = false;
-    this.close();
   }
 
 }
