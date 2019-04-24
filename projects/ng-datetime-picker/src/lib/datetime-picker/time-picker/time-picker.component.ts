@@ -34,6 +34,8 @@ export class TimePickerComponent extends InputCoreComponent implements OnInit, A
 
   @Output('hoursChange') inputHoursChange = new EventEmitter<number>();
   @Output('minutesChange') inputMinutesChange = new EventEmitter<number>();
+  @Output('meridiemChange') inputMeridiemChange = new EventEmitter<string>();
+  @Output('time') timeChange = new EventEmitter<any>();
 
   hours;
   minutes;
@@ -136,6 +138,7 @@ export class TimePickerComponent extends InputCoreComponent implements OnInit, A
 
   changeNoonRelativity() {
     this.noonRelativity = this.noonRelativity === 'am' ? 'pm' : 'am';
+    this.inputMeridiemChange.emit(this.noonRelativity);
     this.setValueResult();
   }
 
@@ -183,5 +186,8 @@ export class TimePickerComponent extends InputCoreComponent implements OnInit, A
     }
 
     this.value = timeMoment ? timeMoment : timeString;
+
+    this.timeChange.emit(this.value);
+
   }
 }
